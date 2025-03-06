@@ -1,7 +1,13 @@
 package main
 
-import parsing_test "lem-in/parsing"
+import (
+	"fmt"
+
+	parsing_test "lem-in/parsing"
+)
 
 func main() {
-	parsing_test.Parse()
+	pars, file := parsing_test.Parsing()
+	fmt.Println(file)
+	fmt.Println(pars)
 }
