@@ -1,12 +1,25 @@
 package utils
 
-type Rooms struct {
+import "fmt"
+
+func PrintError(err error) {
+	fmt.Println("ERROR:", err)
+}
+
+type Ant struct {
+	ID   int
+	Path []string
+}
+
+type Colony struct {
+	NumAnts int
+	Rooms   map[string]*Room
+	Links   map[string][]string
+	Start   *Room
+	End     *Room
+}
+
+type Room struct {
 	Name string
 	X, Y string
-}
-type Khaliya struct {
-	Number_ants int
-	Start       *Rooms
-	End         *Rooms
-	Link        map[string][]string
 }
