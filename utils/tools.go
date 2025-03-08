@@ -1,11 +1,5 @@
 package utils
 
-import "fmt"
-
-func PrintError(err error) {
-	fmt.Println("ERROR:", err)
-}
-
 type Ant struct {
 	ID   int
 	Path []string

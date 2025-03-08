@@ -1,13 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	graph "lem-in/bfs"
 	"lem-in/parsing"
 	"lem-in/printage"
-	"lem-in/utils"
 )
 
 func main() {
@@ -18,7 +16,7 @@ func main() {
 
 	paths := graph.FindPaths(colony)
 	if len(paths) == 0 {
-		utils.PrintError(fmt.Errorf("NO VALID PATHS FOUND"))
+		// utils.PrintError(fmt.Errorf("NO VALID PATHS FOUND"))
 		return
 	}
 
