@@ -7,7 +7,6 @@ import (
 )
 
 func main() {
-	pars, file := parsing_test.Parsing()
-	fmt.Println(file)
+	pars := parsing_test.Parsing()
 	fmt.Println(pars)
 }

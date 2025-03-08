@@ -5,123 +5,115 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	"lem-in/utils"
 )
 
-func Parsing() (*Colony, string) {
-	if len(os.Args) != 2 {
-		fmt.Println("Error: Please provide exactly one file name.")
-		return nil, ""
+
+func Parsing() *utils.AntFarm {
+	colony := &utils.AntFarm{
+		Start: &utils.Room{},
+		End:   &utils.Room{},
+		Rooms: make(map[string]*utils.Room),
+		Links: make(map[string][]string),
 	}
 
-	colony := &Colony{
-		rooms: make(map[string]*Room),
-		links: make(map[string][]string),
-		start: nil,
-		end:   nil,
+	if len(os.Args) != 2 {
+		fmt.Println("Usage: ./lem-in [filename]")
+		os.Exit(1)
+
 	}
 
 	file, err := os.ReadFile(os.Args[1])
 	if err != nil {
-		fmt.Println("Error: Unable to read file:", err)
-		return nil, ""
+		fmt.Println("Error: ", err)
+		return nil
+
 	}
 
-	lines := strings.Split(string(file), "\n")
+	line := strings.Split(string(file), "\n")
+	nbrAnts, err := strconv.Atoi(line[0])
+	if err != nil {
+		fmt.Println("Error: ", err)
+		return nil
 
-	ant, err := strconv.Atoi(strings.TrimSpace(lines[0]))
-	if err != nil || ant <= 0 {
-		fmt.Println("Error: Invalid ant number")
-		return nil, ""
 	}
-	colony.NumAnts = ant
 
-	for r := 1; r < len(lines); r++ {
-		line := strings.TrimSpace(lines[r])
+	if nbrAnts <= 0 {
+		fmt.Println("Error: Number of ants must be greater than 0")
+		return nil
 
-		if line == "" {
-			continue
+	}
+
+	colony.NumAnts = nbrAnts
+
+	for i := 1; i < len(line); i++ {
+
+		room := &utils.Room{
+			Name: "",
+			X:    "",
+			Y:    "",
 		}
+		rooms := strings.Fields(line[i])
 
-		room := strings.Fields(line)
-		if len(room) == 3 {
-			if room[0][0] == 'L' {
-				fmt.Println("Error: Room name cannot start with 'L'.")
-				return nil, ""
+		if len(rooms) == 3 {
+			if rooms[0][0] == 'L' || rooms[0][0] == '#' {
+				fmt.Println("Error: Room name cannot start with 'L' or '#'")
+				return nil
 			}
 
-			if _, exists := colony.rooms[room[0]]; exists {
-				fmt.Println("Error: Duplicate room name found:", room[0])
-				return nil, ""
+			if _, exists := colony.Rooms[rooms[0]]; exists {
+
+				fmt.Println("ERROR: invalid data format (duplicate room name)")
+				return nil
 			}
 
-			for _, existingRoom := range colony.rooms {
-				if room[1] == existingRoom.x && room[2] == existingRoom.y {
-					fmt.Println("Error: Duplicate room coordinates found:", room[1], room[2])
-					return nil, ""
+			for _, v := range colony.Rooms {
+				if v.X == rooms[1] && v.Y == rooms[2] {
+					fmt.Println("ERROR: invalid data format (duplicate coordinates)")
+					return nil
+
 				}
 			}
 
-			colony.rooms[room[0]] = &Room{
-				name: room[0],
-				x:    room[1],
-				y:    room[2],
-			}
+			room.Name = rooms[0]
+			room.X = rooms[1]
+			room.Y = rooms[2]
+
+			colony.Rooms[room.Name] = room
+
+		}
+
+		if line[i-1] == "##start" {
+			colony.Start.Name = rooms[0]
+			colony.Start.X = rooms[1]
+			colony.Start.Y = rooms[2]
 			continue
 		}
 
-		if line == "##start" {
-			if r+1 >= len(lines) {
-				fmt.Println("Error: Missing start room data.")
-				return nil, ""
-			}
-			startRoom := strings.Fields(strings.TrimSpace(lines[r+1]))
-			if len(startRoom) != 3 {
-				fmt.Println("Error: Invalid start room format.")
-				return nil, ""
-			}
-			colony.start = &Room{
-				name: startRoom[0],
-				x:    startRoom[1],
-				y:    startRoom[2],
-			}
-			r++
+		if line[i-1] == "##end" {
+			colony.End.Name = rooms[0]
+			colony.End.X = rooms[1]
+			colony.End.Y = rooms[2]
 			continue
 		}
 
-		if line == "##end" {
-			if r+1 >= len(lines) {
-				fmt.Println("Error: Missing end room data.")
-				return nil, ""
-			}
-			endRoom := strings.Fields(strings.TrimSpace(lines[r+1]))
-			if len(endRoom) != 3 {
-				fmt.Println("Error: Invalid end room format.")
-				return nil, ""
-			}
-			colony.end = &Room{
-				name: endRoom[0],
-				x:    endRoom[1],
-				y:    endRoom[2],
-			}
-			r++
-			continue
-		}
+		link := strings.Split(line[i], "-")
 
-		link := strings.Split(line, "-")
 		if len(link) == 2 {
-			colony.links[link[0]] = append(colony.links[link[0]], link[1])
-			colony.links[link[1]] = append(colony.links[link[1]], link[0])
+
+			colony.Links[link[0]] = append(colony.Links[link[0]], link[1])
+			colony.Links[link[1]] = append(colony.Links[link[1]], link[0])
+
+			continue
+
 		}
+
 	}
 
-	if colony.start == nil {
-		fmt.Println("Error: Start room is missing.")
-		return nil, ""
+	if colony.Start.Name == "" || colony.End.Name == "" || len(colony.Rooms) == 0 {
+		fmt.Println("ERROR: invalid data format (missing start, end or rooms)")
+		return nil
 	}
-	if colony.end == nil {
-		fmt.Println("Error: End room is missing.")
-		return nil, ""
-	}
-
-	return colony, string(file)
+	return colony
 }
