@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
-	"lem-in/bfs"
+	"os"
+
+	graph "lem-in/bfs"
 	"lem-in/parsing"
 	"lem-in/printage"
 	"lem-in/utils"
-	"os"
 )
 
 func main() {
@@ -15,12 +16,11 @@ func main() {
 		os.Exit(1)
 	}
 
-
 	paths := graph.FindPaths(colony)
 	if len(paths) == 0 {
-		utils.PrintError(fmt.Errorf("No valid paths found"))
+		utils.PrintError(fmt.Errorf("NO VALID PATHS FOUND"))
 		return
 	}
 
-	printage.MoveAnts(colony, paths)
+	printage.Printage(colony, paths)
 }

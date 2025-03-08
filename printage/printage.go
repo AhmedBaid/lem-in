@@ -2,14 +2,22 @@ package printage
 
 import (
 	"fmt"
-	"lem-in/utils"
 	"strings"
+
+	"lem-in/utils"
 )
 
-func MoveAnts(colony *utils.Colony, paths [][]string) {
+func Printage(colony *utils.Colony, paths [][]string) {
 	ants := make([]utils.Ant, colony.NumAnts)
+	antPositions := make(map[int]int)
+
+	antIndex := 0
 	for i := 0; i < colony.NumAnts; i++ {
-		ants[i] = utils.Ant{ID: i + 1, Path: paths[i%len(paths)]}
+		ants[i] = utils.Ant{ID: i + 1, Path: paths[antIndex]}
+		antIndex++
+		if antIndex >= len(paths) {
+			antIndex = 0
+		}
 	}
 
 	step := 0
@@ -17,9 +25,11 @@ func MoveAnts(colony *utils.Colony, paths [][]string) {
 		moved := false
 		var moveStrs []string
 
-		for i := range ants {
-			if step < len(ants[i].Path)-1 {
-				moveStrs = append(moveStrs, fmt.Sprintf("L%d-%s", ants[i].ID, ants[i].Path[step+1]))
+		for i := 0; i < colony.NumAnts; i++ {
+			if antPositions[i] < len(ants[i].Path)-1 {
+				// Move to next position
+				antPositions[i]++
+				moveStrs = append(moveStrs, fmt.Sprintf("L%d-%s", ants[i].ID, ants[i].Path[antPositions[i]]))
 				moved = true
 			}
 		}
@@ -27,6 +37,7 @@ func MoveAnts(colony *utils.Colony, paths [][]string) {
 		if !moved {
 			break
 		}
+
 		fmt.Println(strings.Join(moveStrs, " "))
 		step++
 	}

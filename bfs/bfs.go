@@ -1,6 +1,8 @@
 package graph
 
-import "lem-in/utils"
+import (
+	"lem-in/utils"
+)
 
 func FindPaths(colony *utils.Colony) [][]string {
 	queue := [][]string{{colony.Start.Name}}
@@ -26,6 +28,5 @@ func FindPaths(colony *utils.Colony) [][]string {
 			}
 		}
 	}
-
 	return paths
 }

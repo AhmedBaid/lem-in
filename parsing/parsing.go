@@ -2,10 +2,11 @@ package parsing
 
 import (
 	"fmt"
-	"lem-in/utils"
 	"os"
 	"strconv"
 	"strings"
+
+	"lem-in/utils"
 )
 
 func Parsing() *utils.Colony {
@@ -36,8 +37,8 @@ func Parsing() *utils.Colony {
 	}
 	colony.NumAnts = ant
 
-	for r := 1; r < len(lines); r++ {
-		line := strings.TrimSpace(lines[r])
+	for index := 1; index < len(lines); index++ {
+		line := strings.TrimSpace(lines[index])
 
 		if line == "" {
 			continue
@@ -64,11 +65,11 @@ func Parsing() *utils.Colony {
 		}
 
 		if line == "##start" {
-			if r+1 >= len(lines) {
+			if index+1 >= len(lines) {
 				fmt.Println("Error: Missing start room data.")
 				return nil
 			}
-			startRoom := strings.Fields(strings.TrimSpace(lines[r+1]))
+			startRoom := strings.Fields(strings.TrimSpace(lines[index+1]))
 			if len(startRoom) != 3 {
 				fmt.Println("Error: Invalid start room format.")
 				return nil
@@ -78,16 +79,16 @@ func Parsing() *utils.Colony {
 				X:    startRoom[1],
 				Y:    startRoom[2],
 			}
-			r++
+			index++
 			continue
 		}
 
 		if line == "##end" {
-			if r+1 >= len(lines) {
+			if index+1 >= len(lines) {
 				fmt.Println("Error: Missing end room data.")
 				return nil
 			}
-			endRoom := strings.Fields(strings.TrimSpace(lines[r+1]))
+			endRoom := strings.Fields(strings.TrimSpace(lines[index+1]))
 			if len(endRoom) != 3 {
 				fmt.Println("Error: Invalid end room format.")
 				return nil
@@ -97,7 +98,7 @@ func Parsing() *utils.Colony {
 				X:    endRoom[1],
 				Y:    endRoom[2],
 			}
-			r++
+			index++
 			continue
 		}
 
