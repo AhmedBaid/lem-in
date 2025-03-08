@@ -9,7 +9,6 @@ import (
 	"lem-in/utils"
 )
 
-
 func Parsing() *utils.AntFarm {
 	colony := &utils.AntFarm{
 		Start: &utils.Room{},
@@ -47,7 +46,14 @@ func Parsing() *utils.AntFarm {
 
 	colony.NumAnts = nbrAnts
 
+	StartDup := false
+	EndDup := false
+
 	for i := 1; i < len(line); i++ {
+
+		if line[i] == "" {
+			continue
+		}
 
 		room := &utils.Room{
 			Name: "",
@@ -84,17 +90,35 @@ func Parsing() *utils.AntFarm {
 
 		}
 
-		if line[i-1] == "##start" {
-			colony.Start.Name = rooms[0]
-			colony.Start.X = rooms[1]
-			colony.Start.Y = rooms[2]
+		if strings.TrimSpace(line[i-1]) == "##start" {
+			if StartDup {
+				fmt.Println("ERROR: invalid data format (start or end  is depleted)")
+				return nil
+			}
+			StartDup = true
+			if len(rooms) == 3 {
+
+				colony.Start.Name = rooms[0]
+				colony.Start.X = rooms[1]
+				colony.Start.Y = rooms[2]
+			}
+
 			continue
 		}
 
-		if line[i-1] == "##end" {
-			colony.End.Name = rooms[0]
-			colony.End.X = rooms[1]
-			colony.End.Y = rooms[2]
+		if strings.TrimSpace(line[i-1]) == "##end" {
+			if EndDup {
+				fmt.Println("ERROR: invalid data format (start or end  is depleted)")
+				return nil
+			}
+			EndDup = true
+
+			if len(rooms) == 3 {
+
+				colony.End.Name = rooms[0]
+				colony.End.X = rooms[1]
+				colony.End.Y = rooms[2]
+			}
 			continue
 		}
 
@@ -115,5 +139,16 @@ func Parsing() *utils.AntFarm {
 		fmt.Println("ERROR: invalid data format (missing start, end or rooms)")
 		return nil
 	}
+
+	for  v := range colony.Links {
+		if _, exists := colony.Rooms[v]; !exists {
+			fmt.Println("ERROR: invalid data format (missing links)")
+			return nil
+
+		}
+	}
+
+
+
 	return colony
 }
