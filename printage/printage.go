@@ -7,7 +7,7 @@ import (
 	"lem-in/utils"
 )
 
-func Printage(colony *utils.Colony, paths [][]string) {
+func Printage(colony *utils.AntFarm, paths [][]string) {
 	ants := make([]utils.Ant, colony.NumAnts)
 	antPositions := make(map[int]int)
 

@@ -4,7 +4,7 @@ import (
 	"lem-in/utils"
 )
 
-func FindPaths(colony *utils.Colony) [][]string {
+func FindPaths(colony *utils.AntFarm) [][]string {
 	queue := [][]string{{colony.Start.Name}}
 	var paths [][]string
 	visited := map[string]bool{colony.Start.Name: true}

@@ -11,7 +11,7 @@ type Ant struct {
 	Path []string
 }
 
-type Colony struct {
+type AntFarm struct {
 	NumAnts int
 	Rooms   map[string]*Room
 	Links   map[string][]string
