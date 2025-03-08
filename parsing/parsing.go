@@ -29,7 +29,6 @@ func Parsing() *utils.Colony {
 	}
 
 	lines := strings.Split(string(file), "\n")
-
 	ant, err := strconv.Atoi(strings.TrimSpace(lines[0]))
 	if err != nil || ant <= 0 {
 		fmt.Println("Error: Invalid ant number")
