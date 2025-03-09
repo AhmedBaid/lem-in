@@ -1,62 +1,45 @@
 package graph
 
 import (
-	"container/list"
-	"strings"
+	"fmt"
 
 	"lem-in/utils"
 )
 
-func BreadthFirstSearch(colony *utils.AntFarm) [][]string {
-	const notFound = "not_found"
+func FindPaths(colony *utils.AntFarm) [][]string {
 	var paths [][]string
-	startRoom := colony.Start.Name
-	endRoom := colony.End.Name
+	queue := [][]string{{colony.Start.Name}}
 
-	tree := buildGraph(colony)
-	rootNode, rootExists := tree[startRoom]
-	if !rootExists {
-		return paths
-	}
+	for len(queue) > 0 {
+		path := queue[0]
+		queue = queue[1:]
 
-	q := list.New()
-	q.PushBack(rootNode)
+		lastRoom := path[len(path)-1]
 
-	parents := make(map[string]string)
-	parents[startRoom] = ""
-
-	for q.Len() > 0 {
-		currentNode := q.Front().Value.(utils.Node)
-		q.Remove(q.Front())
-
-		if strings.EqualFold(currentNode.Value, endRoom) {
-			var path []string
-			for len(currentNode.Value) > 0 {
-				path = append([]string{currentNode.Value}, path...)
-				currentNode.Value = parents[currentNode.Value]
-			}
+		if lastRoom == colony.End.Name {
 			paths = append(paths, path)
+			continue
 		}
 
-		for _, neighbor := range currentNode.Neighbors {
-			if _, visited := parents[neighbor]; !visited {
-				parents[neighbor] = currentNode.Value
-				q.PushBack(tree[neighbor])
+		for _, neighbor := range colony.Links[lastRoom] {
+			if !contains(path, neighbor) {
+				newPath := append([]string{}, path...)
+				newPath = append(newPath, neighbor)
+				queue = append(queue, newPath)
 			}
 		}
 	}
 
+	fmt.Println(paths)
 	return paths
 }
 
-func buildGraph(colony *utils.AntFarm) map[string]utils.Node {
-	tree := make(map[string]utils.Node)
-	for name, _ := range colony.Rooms {
-		node := utils.Node{Value: name}
-		for _, neighbor := range colony.Links[name] {
-			node.Neighbors = append(node.Neighbors, neighbor)
+// contains checks if a slice contains a specific item
+func contains(slice []string, item string) bool {
+	for _, val := range slice {
+		if val == item {
+			return true
 		}
-		tree[name] = node
 	}
-	return tree
+	return false
 }

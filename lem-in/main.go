@@ -12,13 +12,13 @@ import (
 func main() {
 	colony := parsing.Parsing()
 	if colony == nil {
-		os.Exit(1) 
+		os.Exit(1)
 	}
 
-	paths := graph.BreadthFirstSearch(colony)
+	paths := graph.FindPaths(colony)
 	if len(paths) == 0 {
 		fmt.Println("No valid paths found.")
-		os.Exit(1) 
+		os.Exit(1)
 	}
 
 	printage.Printage(colony, paths)
