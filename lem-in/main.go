@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	graph "lem-in/bfs"
@@ -11,13 +12,13 @@ import (
 func main() {
 	colony := parsing.Parsing()
 	if colony == nil {
-		os.Exit(1)
+		os.Exit(1) 
 	}
 
-	paths := graph.FindPaths(colony)
+	paths := graph.BreadthFirstSearch(colony)
 	if len(paths) == 0 {
-		// utils.PrintError(fmt.Errorf("NO VALID PATHS FOUND"))
-		return
+		fmt.Println("No valid paths found.")
+		os.Exit(1) 
 	}
 
 	printage.Printage(colony, paths)

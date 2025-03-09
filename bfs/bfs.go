@@ -1,42 +1,62 @@
 package graph
 
 import (
-	"fmt"
+	"container/list"
+	"strings"
 
 	"lem-in/utils"
 )
 
-func FindPaths(colony *utils.AntFarm) [][]string {
+func BreadthFirstSearch(colony *utils.AntFarm) [][]string {
+	const notFound = "not_found"
 	var paths [][]string
-	queue := [][]string{{colony.Start.Name}}
-	for len(queue) > 0 {
-		path := queue[0]
-		queue = queue[1:]
+	startRoom := colony.Start.Name
+	endRoom := colony.End.Name
 
-		lastRoom := path[len(path)-1]
+	tree := buildGraph(colony)
+	rootNode, rootExists := tree[startRoom]
+	if !rootExists {
+		return paths
+	}
 
-		if lastRoom == colony.End.Name {
+	q := list.New()
+	q.PushBack(rootNode)
+
+	parents := make(map[string]string)
+	parents[startRoom] = ""
+
+	for q.Len() > 0 {
+		currentNode := q.Front().Value.(utils.Node)
+		q.Remove(q.Front())
+
+		if strings.EqualFold(currentNode.Value, endRoom) {
+			var path []string
+			for len(currentNode.Value) > 0 {
+				path = append([]string{currentNode.Value}, path...)
+				currentNode.Value = parents[currentNode.Value]
+			}
 			paths = append(paths, path)
-			continue
 		}
 
-		for _, neighbor := range colony.Links[lastRoom] {
-			if !contains(path, neighbor) {
-				newPath := append([]string{}, path...)
-				newPath = append(newPath, neighbor)
-				queue = append(queue, newPath)
+		for _, neighbor := range currentNode.Neighbors {
+			if _, visited := parents[neighbor]; !visited {
+				parents[neighbor] = currentNode.Value
+				q.PushBack(tree[neighbor])
 			}
 		}
 	}
-	fmt.Println(paths)
+
 	return paths
 }
 
-func contains(slice []string, item string) bool {
-	for _, val := range slice {
-		if val == item {
-			return true
+func buildGraph(colony *utils.AntFarm) map[string]utils.Node {
+	tree := make(map[string]utils.Node)
+	for name, _ := range colony.Rooms {
+		node := utils.Node{Value: name}
+		for _, neighbor := range colony.Links[name] {
+			node.Neighbors = append(node.Neighbors, neighbor)
 		}
+		tree[name] = node
 	}
-	return false
+	return tree
 }
