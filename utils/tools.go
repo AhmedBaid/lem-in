@@ -5,7 +5,6 @@ type AntFarm struct {
 	End    *Room
 	Rooms  map[string]*Room
 	Links  map[string][]string
-	NumAnts int
 }
 
 type Room struct {
@@ -18,8 +17,9 @@ type Node struct {
 	Value     string
 	Neighbors []string
 }
+var Paths [][]string
 
-type Ant struct {
-	ID   int
-	Path []string
-}
+var Filter [][] string
+
+var Ants int
+
