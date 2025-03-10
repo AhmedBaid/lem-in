@@ -1,8 +1,6 @@
 package graph
 
 import (
-	"fmt"
-
 	"lem-in/utils"
 )
 
@@ -30,7 +28,6 @@ func FindPaths(colony *utils.AntFarm) [][]string {
 		}
 	}
 
-	fmt.Println(paths)
 	return paths
 }
 
