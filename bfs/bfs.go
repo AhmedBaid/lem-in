@@ -46,16 +46,17 @@ func FindDisjointPaths(paths [][]string, colony *utils.AntFarm) [][]string {
 	for _, path := range paths {
 		conflict := false
 
-		for _, room := range path {
-			if usedRooms[room] && room != colony.End.Name {
+		for _, room := range path  {
+			if usedRooms[room] && room!=colony.End.Name && room!=colony.Start.Name {
 				conflict = true
 				break
 			}
 		}
 
-		if !conflict {
+		if !conflict{
+			
 			utils.Filter = append(utils.Filter, path)
-			for _, room := range path {
+			for _, room := range path { 
 				usedRooms[room] = true
 			}
 		}
