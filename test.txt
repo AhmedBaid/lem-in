@@ -1,37 +1,10 @@
-30
+3
 ##start
-S 0 0
-A 2 1
-B 2 2
-C 2 3
-D 4 1
-E 4 2
-F 4 3
-G 6 1
-H 6 2
-I 6 3
-J 6 4
-K 8 2
-X 8 3
+0 1 0
 ##end
-Z 10 3
-S-A
-S-B
-S-C
-A-D
-A-E
-B-E
-B-F
-C-F
-C-G
-D-H
-E-H
-E-I
-F-I
-F-J
-G-J
-H-K
-I-K
-J-X
-K-Z
-X-Z
+1 5 0
+2 9 0
+3 13 0
+0-2
+2-3
+3-1

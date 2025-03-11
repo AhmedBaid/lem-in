@@ -1,25 +1,25 @@
 package utils
 
-import "fmt"
+type AntFarm struct {
+	Start  *Room
+	End    *Room
+	Rooms  map[string]*Room
+	Links  map[string][]string
+	NumAnts int
+}
 
-func PrintError(err error) {
-	fmt.Println("ERROR:", err)
+type Room struct {
+	Name string
+	X    string
+	Y    string
+}
+
+type Node struct {
+	Value     string
+	Neighbors []string
 }
 
 type Ant struct {
 	ID   int
 	Path []string
-}
-
-type AntFarm struct {
-	NumAnts int
-	Rooms   map[string]*Room
-	Links   map[string][]string
-	Start   *Room
-	End     *Room
-}
-
-type Room struct {
-	Name string
-	X, Y string
 }
