@@ -10,6 +10,7 @@ import (
 )
 
 func Parsing() *utils.AntFarm {
+
 	// Create a new AntFarm struct
 	colony := &utils.AntFarm{
 		Start: &utils.Room{},
@@ -17,20 +18,20 @@ func Parsing() *utils.AntFarm {
 		Rooms: make(map[string]*utils.Room),
 		Links: make(map[string][]string),
 	}
-	// check if the number of arguments is equal to 2
+// check if the number of arguments is equal to 2
 	if len(os.Args) != 2 {
 		fmt.Println("Usage: ./lem-in [filename]")
 		return nil
 
 	}
-	// read the file
+// read the file
 	file, err := os.ReadFile(os.Args[1])
 	if err != nil {
 		fmt.Println("Error: ", err)
 		return nil
 
 	}
-	// split the file into lines
+// split the file into lines
 	line := strings.Split(string(file), "\n")
 	nbrAnts, err := strconv.Atoi(line[0])
 	if err != nil {
@@ -38,13 +39,13 @@ func Parsing() *utils.AntFarm {
 		return nil
 
 	}
-	// check if the number of ants is greater than 0
+// check if the number of ants is greater than 0
 	if nbrAnts <= 0 {
 		fmt.Println("Error: Number of ants must be greater than 0")
 		return nil
 
 	}
-	// assign the number of ants to the colony
+// assign the number of ants to the colony
 	colony.NumAnts = nbrAnts
 
 	StartDup := false
@@ -55,14 +56,14 @@ func Parsing() *utils.AntFarm {
 		if line[i] == "" {
 			continue
 		}
-		// create a new room
+// create a new room
 		room := &utils.Room{
 			Name: "",
 			X:    "",
 			Y:    "",
 		}
 		rooms := strings.Fields(line[i])
-		// check if the number of rooms is equal to 3
+// check if the number of rooms is equal to 3
 		if len(rooms) == 3 {
 			//  check if starts with 'L' or '#'
 			if rooms[0][0] == 'L' || rooms[0][0] == '#' {
@@ -76,7 +77,7 @@ func Parsing() *utils.AntFarm {
 				fmt.Println("ERROR: invalid data format (duplicate room name)")
 				return nil
 			}
-			// check if the coordinates are duplicates
+// check if the coordinates are duplicates
 			for _, v := range colony.Rooms {
 				if v.X == rooms[1] && v.Y == rooms[2] {
 					fmt.Println("ERROR: invalid data format (duplicate coordinates)")
@@ -84,7 +85,7 @@ func Parsing() *utils.AntFarm {
 
 				}
 			}
-			// assign the room name, x and y coordinates
+// assign the room name, x and y coordinates
 			room.Name = rooms[0]
 			room.X = rooms[1]
 			room.Y = rooms[2]
@@ -92,8 +93,8 @@ func Parsing() *utils.AntFarm {
 			colony.Rooms[room.Name] = room
 
 		}
-
-		// check if the line starts with '##start'
+		
+// check if the line starts with '##start'
 		if strings.TrimSpace(line[i-1]) == "##start" {
 			// check if the start is duplicated
 			if StartDup {
@@ -101,7 +102,7 @@ func Parsing() *utils.AntFarm {
 				return nil
 			}
 			StartDup = true
-			// add the start room to the colony
+			// add the start room to the colony 
 			if len(rooms) == 3 {
 
 				colony.Start.Name = rooms[0]
@@ -111,7 +112,7 @@ func Parsing() *utils.AntFarm {
 
 			continue
 		}
-		// check if the line starts with '##end'
+// check if the line starts with '##end'
 		if strings.TrimSpace(line[i-1]) == "##end" {
 			// check if the end is duplicated
 			if EndDup {
@@ -119,7 +120,7 @@ func Parsing() *utils.AntFarm {
 				return nil
 			}
 			EndDup = true
-			// add the end room to the colony
+// add the end room to the colony
 			if len(rooms) == 3 {
 
 				colony.End.Name = rooms[0]
@@ -130,7 +131,7 @@ func Parsing() *utils.AntFarm {
 		}
 
 		link := strings.Split(line[i], "-")
-		// add the links to the colony
+//add the links to the colony
 		if len(link) == 2 {
 
 			colony.Links[link[0]] = append(colony.Links[link[0]], link[1])
@@ -141,19 +142,21 @@ func Parsing() *utils.AntFarm {
 		}
 
 	}
-	// check if the start, end or rooms are missing
+// check if the start, end or rooms are missing
 	if colony.Start.Name == "" || colony.End.Name == "" || len(colony.Rooms) == 0 {
 		fmt.Println("ERROR: invalid data format (missing start, end or rooms)")
 		return nil
 	}
-	// check if the links are missing (if have a link of unkonwn room)
-	for v := range colony.Links {
+// check if the links are missing (if have a link of unkonwn room)
+	for  v := range colony.Links {
 		if _, exists := colony.Rooms[v]; !exists {
 			fmt.Println("ERROR: invalid data format (missing links)")
 			return nil
 
 		}
 	}
+
+
 
 	return colony
 }
