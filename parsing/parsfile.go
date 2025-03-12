@@ -16,6 +16,7 @@ func Parsing() *utils.AntFarm {
 		End:   &utils.Room{},
 		Rooms: make(map[string]*utils.Room),
 		Links: make(map[string][]string),
+		
 	}
 	// check if the number of arguments is equal to 2
 	if len(os.Args) != 2 {
@@ -45,7 +46,7 @@ func Parsing() *utils.AntFarm {
 
 	}
 	// assign the number of ants to the colony
-	colony.NumAnts = nbrAnts
+	utils.Ants = nbrAnts
 
 	StartDup := false
 	EndDup := false

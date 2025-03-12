@@ -2,43 +2,73 @@ package printage
 
 import (
 	"fmt"
-	"strings"
+	"strconv"
 
 	"lem-in/utils"
 )
 
-func Printage(colony *utils.AntFarm, paths [][]string) {
-	ants := make([]utils.Ant, colony.NumAnts)
-	antPositions := make(map[int]int)
+func M(s [][]string) map[int]int {
+	mapp := make(map[int]int)
+	for v := range s {
+		mapp[v] = len(s[v])
+	}
+	return mapp
+}
 
-	antIndex := 0
-	for i := 0; i < colony.NumAnts; i++ {
-		ants[i] = utils.Ant{ID: i + 1, Path: paths[antIndex]}
-		antIndex++
-		if antIndex >= len(paths) {
-			antIndex = 0
+func shortIndex(Map map[int]int) int {
+	i := Map[0]
+	index := 0
+	for t, len := range Map {
+		if len < i {
+			i = len
+			index = t
 		}
 	}
+	return index
+}
 
-	step := 0
-	for {
-		moved := false
-		var moveStrs []string
+func Sendants(colony *utils.AntFarm) {
+	fmt.Println(colony)
 
-		for i := 0; i < colony.NumAnts; i++ {
-			if antPositions[i] < len(ants[i].Path)-1 {
-				// Move to next position
-				antPositions[i]++
-				moveStrs = append(moveStrs, fmt.Sprintf("L%d-%s", ants[i].ID, ants[i].Path[antPositions[i]]))
-				moved = true
+	antGroups := make([][]string, len(utils.Paths))
+	antId := 1
+	mapp := M(utils.Paths)
+
+	for antId <= utils.Ants {
+		minPath := shortIndex(mapp)
+		antGroups[minPath] = append(antGroups[minPath], "L"+strconv.Itoa(antId))
+		antId++
+		mapp[minPath]++
+	}
+	control_trafic(antGroups,colony)
+}
+
+func control_trafic(antGroups [][]string,colony *utils.AntFarm ) {
+	trafic := make(map[string]int)
+	Emptyroom := make(map[string]bool)
+	finished := 0
+	for finished != utils.Ants {
+		for i := 0; i < len(utils.Paths); i++ {
+			Emptyroom[colony.End.Name] = false
+			for currentStep := 0; currentStep < len(antGroups[i]); currentStep++ {
+				ant := antGroups[i][currentStep]
+				nextroom := utils.Paths[i][trafic[ant]+1]
+				if !Emptyroom[nextroom] {
+					fmt.Printf("%v-%v ", ant, nextroom)
+					Emptyroom[nextroom] = true
+					Emptyroom[utils.Paths[i][trafic[ant]]] = false
+					if nextroom == colony.End.Name {
+						finished++
+						delete(trafic, ant)
+						antGroups[i] = append(antGroups[i][:currentStep], antGroups[i][currentStep+1:]...)
+						currentStep--
+						Emptyroom[colony.End.Name] = true
+						continue
+					}
+					trafic[ant]++
+				}
 			}
 		}
-
-		if !moved {
-			break
-		}
-
-		fmt.Println(strings.Join(moveStrs, " "))
-		step++
+		fmt.Println()
 	}
 }
