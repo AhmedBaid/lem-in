@@ -30,9 +30,9 @@ func shortIndex(Map map[int]int) int {
 func Sendants(colony *utils.AntFarm) {
 	fmt.Println(colony)
 
-	antGroups := make([][]string, len(utils.Paths))
+	antGroups := make([][]string, len(utils.Filter))
 	antId := 1
-	mapp := M(utils.Paths)
+	mapp := M(utils.Filter)
 
 	for antId <= utils.Ants {
 		minPath := shortIndex(mapp)
@@ -48,15 +48,15 @@ func control_trafic(antGroups [][]string,colony *utils.AntFarm ) {
 	Emptyroom := make(map[string]bool)
 	finished := 0
 	for finished != utils.Ants {
-		for i := 0; i < len(utils.Paths); i++ {
+		for i := 0; i < len(utils.Filter); i++ {
 			Emptyroom[colony.End.Name] = false
 			for currentStep := 0; currentStep < len(antGroups[i]); currentStep++ {
 				ant := antGroups[i][currentStep]
-				nextroom := utils.Paths[i][trafic[ant]+1]
+				nextroom := utils.Filter[i][trafic[ant]+1]
 				if !Emptyroom[nextroom] {
 					fmt.Printf("%v-%v ", ant, nextroom)
 					Emptyroom[nextroom] = true
-					Emptyroom[utils.Paths[i][trafic[ant]]] = false
+					Emptyroom[utils.Filter[i][trafic[ant]]] = false
 					if nextroom == colony.End.Name {
 						finished++
 						delete(trafic, ant)
