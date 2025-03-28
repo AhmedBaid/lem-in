@@ -45,24 +45,24 @@ func Sendants(colony *utils.AntFarm) {
 
 func control_trafic(antGroups [][]string,colony *utils.AntFarm ) {
 	trafic := make(map[string]int)
-	Emptyroom := make(map[string]bool)
+	romm3Amra := make(map[string]bool)
 	finished := 0
 	for finished != utils.Ants {
 		for i := 0; i < len(utils.Filter); i++ {
-			Emptyroom[colony.End.Name] = false
+			romm3Amra[colony.End.Name] = false
 			for currentStep := 0; currentStep < len(antGroups[i]); currentStep++ {
 				ant := antGroups[i][currentStep]
 				nextroom := utils.Filter[i][trafic[ant]+1]
-				if !Emptyroom[nextroom] {
+				if !romm3Amra[nextroom] {
 					fmt.Printf("%v-%v ", ant, nextroom)
-					Emptyroom[nextroom] = true
-					Emptyroom[utils.Filter[i][trafic[ant]]] = false
+					romm3Amra[nextroom] = true
+					romm3Amra[utils.Filter[i][trafic[ant]]] = false
 					if nextroom == colony.End.Name {
 						finished++
 						delete(trafic, ant)
 						antGroups[i] = append(antGroups[i][:currentStep], antGroups[i][currentStep+1:]...)
 						currentStep--
-						Emptyroom[colony.End.Name] = true
+						romm3Amra[colony.End.Name] = true
 						continue
 					}
 					trafic[ant]++
