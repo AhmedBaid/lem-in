@@ -44,6 +44,10 @@ func FindDisjointPaths(paths [][]string, colony *utils.AntFarm) [][]string {
 	n := make(map[string]int)
 	longestPaths := make(map[int]bool) 
 	for i := 0; i < len(paths); i++ {
+		if len(paths[i])==2{
+			utils.Filter=append(utils.Filter, paths[i])
+
+		}
 		for j := 1; j < len(paths[i])-1; j++ {
 			if k, exist := n[paths[i][j]]; exist {
 				if len(paths[k]) < len(paths[i]) {
