@@ -42,7 +42,7 @@ func contains(slice []string, item string) bool {
 
 func FindDisjointPaths(paths [][]string, colony *utils.AntFarm) [][]string {
 	n := make(map[string]int)
-	longestPaths := make(map[int]bool) 
+	smollpath := make(map[int]bool) 
 	for i := 0; i < len(paths); i++ {
 		if len(paths[i])==2{
 			utils.Filter=append(utils.Filter, paths[i])
@@ -50,16 +50,16 @@ func FindDisjointPaths(paths [][]string, colony *utils.AntFarm) [][]string {
 		}
 		for j := 1; j < len(paths[i])-1; j++ {
 			if k, exist := n[paths[i][j]]; exist {
-				if len(paths[k]) < len(paths[i]) {
-					longestPaths[k] = false 
+				if len(paths[k]) > len(paths[i]) {
+					smollpath[k] = false 
 					n[paths[i][j]] = i         
-					longestPaths[i] = true 
+					smollpath[i] = true 
 				} else {
-					if !longestPaths[k]{
-						longestPaths[i] = true
+					if !smollpath[k]{
+						smollpath[i] = true
 						 n[paths[i][j]] = i  
 					}else{
-						longestPaths[i]=false
+						smollpath[i]=false
                          break
 					}
 				
@@ -67,12 +67,12 @@ func FindDisjointPaths(paths [][]string, colony *utils.AntFarm) [][]string {
 				}
 			} else {
 				n[paths[i][j]] = i
-				longestPaths[i] = true
+				smollpath[i] = true
 			}
 		}
 	}
 
-	for i, keep := range longestPaths {
+	for i, keep := range smollpath {
 		if keep {
 			utils.Filter= append(utils.Filter, paths[i])
 			
