@@ -41,44 +41,42 @@ func contains(slice []string, item string) bool {
 }
 
 func FindDisjointPaths(paths [][]string, colony *utils.AntFarm) [][]string {
-	n := make(map[string]int)
-	smollpath := make(map[int]bool) 
-	for i := 0; i < len(paths); i++ {
-		if len(paths[i])==2{
-			utils.Filter=append(utils.Filter, paths[i])
-
+	var currentPaths [][]string        
+	usedNodes := make(map[string]bool) 
+	var backtrack func(int)
+	backtrack = func(start int) {
+		if len(currentPaths) > len(utils.Filter) {
+			utils.Filter = make([][]string, len(currentPaths))
+			copy(utils.Filter, currentPaths)
 		}
-		for j := 1; j < len(paths[i])-1; j++ {
-			if k, exist := n[paths[i][j]]; exist {
-				if len(paths[k]) > len(paths[i]) {
-					smollpath[k] = false 
-					n[paths[i][j]] = i         
-					smollpath[i] = true 
-				} else {
-					if !smollpath[k]{
-						smollpath[i] = true
-						 n[paths[i][j]] = i  
-					}else{
-						smollpath[i]=false
-                         break
-					}
-				
-					
+
+		for i := start; i < len(paths); i++ {
+			path := paths[i]
+			keepPath := true 
+
+			for _, node := range path[1 : len(path)-1] {
+				if usedNodes[node] {
+					keepPath = false 
+					break
 				}
-			} else {
-				n[paths[i][j]] = i
-				smollpath[i] = true
+			}
+
+			if keepPath {
+				currentPaths = append(currentPaths, path)
+				for _, node := range path[1 : len(path)-1] {
+					usedNodes[node] = true
+				}
+
+				backtrack(i + 1)
+
+				currentPaths = currentPaths[:len(currentPaths)-1]
+				for _, node := range path[1 : len(path)-1] {
+					delete(usedNodes, node)
+				}
 			}
 		}
 	}
 
-	for i, keep := range smollpath {
-		if keep {
-			utils.Filter= append(utils.Filter, paths[i])
-			
-		}
-	}
-	
-
-return utils.Filter
+	backtrack(0)
+	return utils.Filter
 }
