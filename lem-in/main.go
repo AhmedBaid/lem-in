@@ -11,22 +11,22 @@ import (
 )
 
 func main() {
+
+
+
+
 	colony := parsing.Parsing()
 	if colony == nil {
 		os.Exit(1)
 	}
-	//fmt.Println(colony)
+	// fmt.Println(colony)
 
 	paths := graph.FindPaths(colony)
 	if len(paths) == 0 {
 		fmt.Println("No valid paths found.")
 		os.Exit(1)
 	}
-   utils.Filter=graph.FindDisjointPaths(paths, colony )
-   
+	utils.Filter = graph.FindDisjointPaths(paths, colony)
 
 	printage.Sendants(colony)
-	fmt.Println(utils.Filter)
-	
-	fmt.Println(paths)
 }

@@ -28,8 +28,6 @@ func shortIndex(Map map[int]int) int {
 }
 
 func Sendants(colony *utils.AntFarm) {
-	fmt.Println(colony)
-
 	antGroups := make([][]string, len(utils.Filter))
 	antId := 1
 	mapp := M(utils.Filter)
