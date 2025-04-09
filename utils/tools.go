@@ -1,11 +1,10 @@
 package utils
 
 type AntFarm struct {
-	Start  *Room
-	End    *Room
-	Rooms  map[string]*Room
-	Links  map[string][]string
-	NumAnts int
+	Start *Room
+	End   *Room
+	Rooms map[string]*Room
+	Links map[string][]string
 }
 
 type Room struct {
@@ -19,7 +18,8 @@ type Node struct {
 	Neighbors []string
 }
 
-type Ant struct {
-	ID   int
-	Path []string
-}
+var Paths [][]string
+
+var Filter [][]string
+
+var Ants int

@@ -32,9 +32,9 @@ func Parsing() *utils.AntFarm {
 	}
 	// split the file into lines
 	line := strings.Split(string(file), "\n")
-	nbrAnts, err := strconv.Atoi(line[0])
+	nbrAnts, err := strconv.Atoi(strings.TrimSpace(line[0]))
 	if err != nil {
-		fmt.Println("Error: ", err)
+		fmt.Println("Error: Invalid  number of Ants ", err)
 		return nil
 
 	}
@@ -45,7 +45,7 @@ func Parsing() *utils.AntFarm {
 
 	}
 	// assign the number of ants to the colony
-	colony.NumAnts = nbrAnts
+	utils.Ants = nbrAnts
 
 	StartDup := false
 	EndDup := false
@@ -108,7 +108,6 @@ func Parsing() *utils.AntFarm {
 				colony.Start.X = rooms[1]
 				colony.Start.Y = rooms[2]
 			}
-
 			continue
 		}
 		// check if the line starts with '##end'
@@ -129,7 +128,7 @@ func Parsing() *utils.AntFarm {
 			continue
 		}
 
-		link := strings.Split(line[i], "-")
+		link := strings.Split(strings.TrimSpace(line[i]), "-")
 		// add the links to the colony
 		if len(link) == 2 {
 
