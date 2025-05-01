@@ -3,37 +3,62 @@ package graph
 import (
 	"lem-in/utils"
 )
+func FindShortestPath(start, end string, links map[string][]string, forbidden map[string]bool) []string {
+	type Node struct {
+		Name string
+		Path []string
+	}
 
-func FindPaths(colony *utils.AntFarm) [][]string {
-	queue := [][]string{{colony.Start.Name}}
+	visited := make(map[string]bool)
+	queue := []Node{{Name: start, Path: []string{start}}}
 
 	for len(queue) > 0 {
-		path := queue[0]
+		current := queue[0]
 		queue = queue[1:]
 
-		lastRoom := path[len(path)-1]
-
-		if lastRoom == colony.End.Name {
-			utils.Paths = append(utils.Paths, path)
-			continue
+		if current.Name == end {
+			return current.Path
 		}
 
-		for _, neighbor := range colony.Links[lastRoom] {
-			if !contains(path, neighbor) {
-				newPath := append([]string{}, path...)
+		if visited[current.Name] {
+			continue
+		}
+		visited[current.Name] = true
+
+		for _, neighbor := range links[current.Name] {
+			if !visited[neighbor] && !contains(current.Path, neighbor) && !forbidden[neighbor] {
+				newPath := append([]string{}, current.Path...)
 				newPath = append(newPath, neighbor)
-				queue = append(queue, newPath)
+				queue = append(queue, Node{Name: neighbor, Path: newPath})
 			}
 		}
 	}
 
-	return utils.Paths
+	return nil
 }
 
-// contains checks if a slice contains a specific item
-func contains(slice []string, item string) bool {
-	for _, val := range slice {
-		if val == item {
+func FindPaths(colony *utils.AntFarm) [][]string {
+	var paths [][]string
+
+	for _, startNeighbor := range colony.Links[colony.Start.Name] {
+		forbidden := map[string]bool{
+			colony.Start.Name: true,
+		}
+
+		path := FindShortestPath(startNeighbor, colony.End.Name, colony.Links, forbidden)
+		if path != nil {
+			fullPath := append([]string{colony.Start.Name}, path...)
+			paths = append(paths, fullPath)
+		}
+	}
+
+	return paths
+}
+
+
+func contains(path []string, room string) bool {
+	for _, r := range path {
+		if r == room {
 			return true
 		}
 	}
