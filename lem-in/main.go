@@ -22,7 +22,8 @@ func main() {
 		fmt.Println("No valid paths found.")
 		os.Exit(1)
 	}
-fmt.Println(paths,"\n")
+
+	
 	fmt.Println(string(parsing.File) + "\n")
 	utils.Filter = graph.FindDisjointPaths(paths, colony)
 
