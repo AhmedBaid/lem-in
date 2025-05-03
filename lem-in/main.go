@@ -11,7 +11,6 @@ import (
 )
 
 func main() {
-
 	colony := parsing.Parsing()
 	if colony == nil {
 		os.Exit(1)
@@ -23,7 +22,8 @@ func main() {
 		fmt.Println("No valid paths found.")
 		os.Exit(1)
 	}
-	fmt.Println(paths)
+fmt.Println(paths,"\n")
+	fmt.Println(string(parsing.File) + "\n")
 	utils.Filter = graph.FindDisjointPaths(paths, colony)
 
 	printage.Sendants(colony)

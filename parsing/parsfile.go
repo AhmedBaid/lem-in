@@ -8,7 +8,7 @@ import (
 
 	"lem-in/utils"
 )
-
+var File []byte
 func Parsing() *utils.AntFarm {
 	// Create a new AntFarm struct
 	colony := &utils.AntFarm{
@@ -28,10 +28,13 @@ func Parsing() *utils.AntFarm {
 	if err != nil {
 		fmt.Println("Error: ", err)
 		return nil
-
+		
 	}
+	File=file
 	// split the file into lines
 	line := strings.Split(string(file), "\n")
+
+	
 	nbrAnts, err := strconv.Atoi(strings.TrimSpace(line[0]))
 	if err != nil {
 		fmt.Println("Error: Invalid  number of Ants ", err)

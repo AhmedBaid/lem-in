@@ -1,65 +1,11 @@
 package graph
 
 import (
-	"fmt"
 	"runtime"
 
 	"lem-in/utils"
 )
 
-/*
-	 func BFS(graph map[string][]string, start, end string) []string {
-		queue := [][]string{{start}}
-
-		for len(queue) > 0 {
-			path := queue[0]
-			queue = queue[1:]
-			last := path[len(path)-1]
-
-			if last == end {
-				return path
-			}
-
-			for _, neighbor := range graph[last] {
-				if !contains(path, neighbor){
-
-					newPath := append([]string{}, path...)
-					newPath = append(newPath, neighbor)
-					queue = append(queue, newPath)
-				}
-			}
-		}
-
-		return nil
-	}
-
-	func FindPaths(colony *utils.AntFarm) [][]string {
-		var allPaths [][]string
-
-		for _, startNeighbor := range colony.Links[colony.Start.Name] {
-			// Loop on neighbors of End
-			for _, endNeighbor := range colony.Links[colony.End.Name] {
-				fmt.Println("start", startNeighbor)
-				fmt.Println("end", endNeighbor)
-
-				// Get path from startNeighbor to endNeighbor
-				pathStartToEnd := BFS(colony.Links, startNeighbor, endNeighbor)
-
-fmt.Println("paaa", pathStartToEnd)
-
-				// If a path was found, complete it by adding Start and End
-				if pathStartToEnd != nil {
-					// Add Start at the beginning and End at the end
-					fullPath := append([]string{colony.Start.Name}, pathStartToEnd...)
-					fullPath = append(fullPath, colony.End.Name)
-					allPaths = append(allPaths, fullPath)
-				}
-			}
-		}
-
-		return allPaths
-	}
-*/
 func FindPaths(colony *utils.AntFarm) [][]string {
 	paths := [][]string{}
 
@@ -81,11 +27,9 @@ func FindPaths(colony *utils.AntFarm) [][]string {
 				var memStats runtime.MemStats
 				runtime.ReadMemStats(&memStats)
 
-				// نحدّدو حد أقصى مثلاً 100MB
 				highMemory := memStats.Alloc > 100*1024*1024
 
 				if highMemory {
-					// فاش تكون الذاكرة مستهلكة بزاف
 					if !contains(path, next) && !visited[next] {
 						newPath := append([]string{}, path...)
 						newPath = append(newPath, next)
@@ -93,7 +37,6 @@ func FindPaths(colony *utils.AntFarm) [][]string {
 						visited[next] = true
 					}
 				} else {
-					// فاش تكون الذاكرة ماشي مشكل
 					if !contains(path, next) {
 						newPath := append([]string{}, path...)
 						newPath = append(newPath, next)
@@ -155,6 +98,5 @@ func FindDisjointPaths(paths [][]string, colony *utils.AntFarm) [][]string {
 	}
 
 	backtrack(0)
-	fmt.Println(utils.Filter)
 	return utils.Filter
 }
