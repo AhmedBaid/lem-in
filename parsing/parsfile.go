@@ -51,8 +51,6 @@ func Parsing() *utils.AntFarm {
 	// assign the number of ants to the colony
 	utils.Ants = nbrAnts
 
-	StartDup := false
-	EndDup := false
 	skip1 := false
 	skip2 := false
 	for i := 1; i < len(line); i++ {
@@ -120,12 +118,6 @@ func Parsing() *utils.AntFarm {
 
 		// check if the line starts with '##start'
 		if skip1 {
-			// check if the start is duplicated
-			if StartDup {
-				fmt.Println("ERROR: invalid data format (start or end  is depleted)")
-				return nil
-			}
-			StartDup = true
 			// add the start room to the colony
 			if len(rooms) == 3 {
 
@@ -138,12 +130,6 @@ func Parsing() *utils.AntFarm {
 		}
 		// check if the line starts with '##end'
 		if skip2 {
-			// check if the end is duplicated
-			if EndDup {
-				fmt.Println("ERROR: invalid data format (start or end  is depleted)")
-				return nil
-			}
-			EndDup = true
 			// add the end room to the colony
 			if len(rooms) == 3 {
 
