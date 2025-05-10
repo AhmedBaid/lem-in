@@ -133,11 +133,10 @@ func FindDisjointPaths2(paths [][]string, colony *utils.AntFarm) [][]string {
 
 	}
 
-	var result [][]string
 	for idx, ok := range smollpath {
 		if ok {
-			result = append(result, paths[idx])
+			utils.Filter = append(utils.Filter, paths[idx])
 		}
 	}
-	return result
+	return utils.Filter
 }
