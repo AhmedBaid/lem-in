@@ -105,7 +105,7 @@ func Parsing() *utils.AntFarm {
 				return nil
 			}
 			room.X = rooms[1]
-			_, err2 := strconv.Atoi(rooms[1])
+			_, err2 := strconv.Atoi(rooms[2])
 			if err2 != nil {
 				fmt.Println("ERROR: ", err2, "coordoni")
 				return nil
